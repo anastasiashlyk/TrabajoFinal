@@ -1,3 +1,8 @@
+#include <iostream>
+#include <fstream>
+#include "GSenku.hpp"
+
+
 // FUNCIONES / PROCEDIMIENTOS 
 
 // Pre: true
@@ -8,7 +13,30 @@ bool inicializarTablero(const string nombreFichero, tpTablero &tablero);
 // Pre: true 
 // Post: lee los movimientos válidos del fichero que se le pasa como argumento 
 //      inicializando la estructura y devolviendo true si todo ha ido bien y false si ha habido algún error
-bool inicializarMovimientosValidos(const string nombreFichero, tpMovimientosValidos &movimientos);
+bool inicializarMovimientosValidos(const string nombreFichero, tpMovimientosValidos &movimientos){
+    ifstream f(nombreFichero);
+    if(f.is_open()){
+        char c;
+        while(f>>c){
+            for(int i=0; i <= 8; i++){
+                if (c == '-'){
+                    movimientos.validos[i]=false;
+                }
+                if(c == '+'){
+                    movimientos.validos[i]=true;
+                }
+
+            }
+            
+        }
+        return true;
+    }else{
+        cerr << "No se ha podido abrir el archivo.";
+        return false;
+    }
+
+
+}
 
 // Pre: tablero contiene el estado actual de la ejecución de la búsqueda de la solución
 // Post: Se ha mostrado el tablero por pantalla
