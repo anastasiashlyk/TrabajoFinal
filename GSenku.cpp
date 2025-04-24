@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "GSenku.hpp"
-
+using namespace std;
 
 // FUNCIONES / PROCEDIMIENTOS 
 
@@ -25,9 +25,7 @@ bool inicializarMovimientosValidos(const string nombreFichero, tpMovimientosVali
                 if(c == '+'){
                     movimientos.validos[i]=true;
                 }
-
             }
-            
         }
         return true;
     }else{
@@ -40,7 +38,22 @@ bool inicializarMovimientosValidos(const string nombreFichero, tpMovimientosVali
 
 // Pre: tablero contiene el estado actual de la ejecución de la búsqueda de la solución
 // Post: Se ha mostrado el tablero por pantalla
-void mostrarTablero(const tpTablero & tablero);
+void mostrarTablero(const tpTablero & tablero){
+    for(int i = 0; i< tablero.nfils; i++){
+        for(int j = 0; j < tablero.ncols; j++){
+            if(tablero.matriz[i][j] == 0){
+                cout << "  ";
+            }
+            if(tablero.matriz[i][j] == 1){
+                cout <<"\033[42m" <<" " << "\033[0m" << " ";
+            }
+            if(tablero.matriz[i][j] == 2){
+                cout << "\033[41m" <<" " << "\033[0m" << " ";
+            }
+        }
+        cout << endl;
+    }
+}
 
 // Pre: tablero contiene el estado inicial del que se parte para la búsqueda, 
 //      movimientosValidos contiene los movimientos que están permitidos, 
