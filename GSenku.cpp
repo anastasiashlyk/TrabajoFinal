@@ -121,7 +121,7 @@ int buscaSolucion(tpTablero &tablero, const tpMovimientosValidos &movValidos, tp
 // Post: escribe la lista de movimientos en el fichero que se le pasa como argumento siguiendo el 
 //      formato especificado en el guión (si está vacía, se escribe un -1 en el fichero)
 void escribeListaMovimientos (string nombreFichero, const tpListaMovimientos &solucion){
-  ifsteam f;
+  ofstream f;
   f.open(nombrefichero); 
   if (ListaMovimientos.numMovs>0){
     for(int i = 0; i< ListaMovimientos.numMovs; i++){
