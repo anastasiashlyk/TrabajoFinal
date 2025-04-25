@@ -23,7 +23,7 @@ char celda;
 int k=0;
 for (int i = 0; i < tablero.nfils; ++i) {
       for (int j = 0; j < tablero.ncols; ++j) {
-        f>>celda
+        (f>>celda)//comprobar que todas las entradas son validas hasta que se cargue todo el tablero
         switch (celda) {
             case '-':
               tablero.matriz[i][j] = NO_USADA;
@@ -38,10 +38,8 @@ for (int i = 0; i < tablero.nfils; ++i) {
               cerr << "Entrada de datos del ficheroTablero invalido " << celda << endl;
               return false;
         }
-        k++;
     }
-      if (k==(tablero.nfils*tablero.nfils)){return true};
-      cerr << "matriz invalida" << nombreFichero << endl;
+    return true;
 }
 
 cerr << "Error al abrir el fichero" << nombreFichero << endl;
@@ -98,10 +96,39 @@ void mostrarTablero(const tpTablero & tablero){
 //      solucionParcial contiene la solución actual como lista de movimientos, En el tablero se han colocada las n primeras piezas de vEntrada, en la columnas indicadas respectivamente en vSalida
 // Post: solucionParcial contendrá la lista de movimientos completa (si no se llega a una solución, estará vacía, numMovs == 0)
 //       Devuelve 1 si encuentra solución, -1 si no la encuentra.
-int buscaSolucion(tpTablero &tablero, const tpMovimientosValidos &movValidos, tpListaMovimientos &solucionParcial, const int retardo=0);
+int buscaSolucion(tpTablero &tablero, const tpMovimientosValidos &movValidos, tpListaMovimientos &solucionParcial, const int retardo=0){
+  for (int i = 0; i < tablero.nfils; ++i) {
+    for (int j = 0; j < tablero.ncols; ++j) {
+      for (int k = 0; k < 8; ++k) {
+        if (MovimientosValidos.valido[k]){
+          
+          
+          
+        }
+    }
+  }
+
+//forxfor verificar cada pieza independientemente
+  //for verificar cada movimiento de cada pieza
+    //if si es valido modificar, solucionParcial y la matriz actual 
+//
+
+
+}
 
 
 // Pre: listaMovimientos contiene la lista de movimientos con la solucion 
 // Post: escribe la lista de movimientos en el fichero que se le pasa como argumento siguiendo el 
 //      formato especificado en el guión (si está vacía, se escribe un -1 en el fichero)
-void escribeListaMovimientos (string nombreFichero, const tpListaMovimientos &solucion); 
+void escribeListaMovimientos (string nombreFichero, const tpListaMovimientos &solucion){
+  ifsteam f;
+  f.open(nombrefichero); 
+  if (ListaMovimientos.numMovs>0){
+    for(int i = 0; i< ListaMovimientos.numMovs; i++){
+      f << ListaMovimientos.movs[i] << endl;
+    }
+  }
+  else{
+    f << "-1";
+  }
+}
