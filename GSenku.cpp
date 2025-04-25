@@ -1,4 +1,4 @@
-#include <iostream>
+    #include <iostream>
 #include <fstream>
 #include "GSenku.hpp"
 using namespace std;
@@ -8,7 +8,45 @@ using namespace std;
 // Pre: true
 // Post: lee la configuración y el estado del tablero del fichero de configuración que se le pasa como argumento
 //      inicializando tablero y devolviendo true si todo ha ido bien y false si ha habido algún error
-bool inicializarTablero(const string nombreFichero, tpTablero &tablero);
+bool inicializarTablero(const string nombreFichero, tpTablero &tablero){
+ifsteam f;
+f.open(nombrefichero);
+if(f.is_open()){
+f >> tablero.nfils
+f >> tablero.ncols
+if(tablero.nfils<=0||tablero.ncols<=0||tablero.nfils>MAXDIM||tablero.ncols>MAXDIM){
+cerr << "Entradas de dimensiones del ficheroTablero invalidas" << nombreFichero << endl;
+return false;
+}
+getline(f)
+char celda;
+int k=0;
+for (int i = 0; i < tablero.nfils; ++i) {
+      for (int j = 0; j < tablero.ncols; ++j) {
+        f>>celda
+        switch (celda) {
+            case '-':
+              tablero.matriz[i][j] = NO_USADA;
+              break;
+            case 'o':
+              tablero.matriz[i][j] = OCUPADA;
+              break;
+            case 'x':
+              tablero.matriz[i][j] = VACIA;
+              break;
+            default:
+              cerr << "Entrada de datos del ficheroTablero invalido " << celda << endl;
+              return false;
+        }
+        k++;
+    }
+      if (k==(tablero.nfils*tablero.nfils)){return true};
+      cerr << "matriz invalida" << nombreFichero << endl;
+}
+
+cerr << "Error al abrir el fichero" << nombreFichero << endl;
+return false;
+}
 
 // Pre: true 
 // Post: lee los movimientos válidos del fichero que se le pasa como argumento 
