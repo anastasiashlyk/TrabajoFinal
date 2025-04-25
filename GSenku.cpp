@@ -38,10 +38,8 @@ for (int i = 0; i < tablero.nfils; ++i) {
               cerr << "Entrada de datos del ficheroTablero invalido " << celda << endl;
               return false;
         }
-        k++;
     }
-      if (k==(tablero.nfils*tablero.nfils)){return true};
-      cerr << "matriz invalida" << nombreFichero << endl;
+    return true;
 }
 
 cerr << "Error al abrir el fichero" << nombreFichero << endl;
