@@ -99,14 +99,24 @@ void mostrarTablero(const tpTablero & tablero){
 int buscaSolucion(tpTablero &tablero, const tpMovimientosValidos &movValidos, tpListaMovimientos &solucionParcial, const int retardo=0){
   for (int i = 0; i < tablero.nfils; ++i) {
     for (int j = 0; j < tablero.ncols; ++j) {
-      for (int k = 0; k < 8; ++k) {
-        if (MovimientosValidos.valido[k]){
-          
-          
-          
+      //variables que trabajaremos en mod 2 con la intención de apuntar a las posiciones abyacentes a la canica (tocara meterlo como vectores en hpp)
+      int RelojX=0;
+      int RelojY=1;
+      //Valores: [0]=(x)0 (y)1, 11, 10, 1-1, 0-1 -1-1 -10 -11 saetas de reloj de los movimientos
+      for (int k = 0; (k<=8)&&(MovimientosValidos.valido[k]); ++k) {
+        //Ahora utilizariamos el vector de las posiciones que apuntan por el reloj para hacer el movimiento de las bolas
+        if(){
+        //entrara si se puede hacer el movimiento para eliminar la bola de enmedio, quitar esa y poner donde toca (modificar la matriz)
         }
+        //llama recursiva que volvera a mirar todas las bolas previas y en caso de que el posible movimiento no sea valido si falla esta rama seguira.
+        
+        //al haber fallado desharemos el movimiento previo a la llamada como en el de las reinas, osea las posiciones y de 3 casillsa hay que guardarlas
+        
+        
+      }
     }
   }
+}
 
 //forxfor verificar cada pieza independientemente
   //for verificar cada movimiento de cada pieza
