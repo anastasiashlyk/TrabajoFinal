@@ -102,15 +102,16 @@ int buscaSolucion(tpTablero &tablero, const tpMovimientosValidos &movValidos, tp
       //variables que trabajaremos en mod 2 con la intención de apuntar a las posiciones abyacentes a la canica (tocara meterlo como vectores en hpp)
       int RelojX=0;
       int RelojY=1;
-      //Valores: [0]=(x)0 (y)1, 11, 10, 1-1, 0-1 -1-1 -10 -11 saetas de reloj de los movimientos
-      for (int k = 0; (k<=8)&&(MovimientosValidos.valido[k]); ++k) {
+      //Valores en dif vect: [0]=(x)0 (y)1, 11, 10, 1-1, 0-1 -1-1 -10 -11 saetas de reloj de los movimientos
+      for (int k = 0; k<=8; ++k) {
+        if(MovimientosValidos.valido[k])
         //Ahora utilizariamos el vector de las posiciones que apuntan por el reloj para hacer el movimiento de las bolas
-        if(){
+        if(//vola se puede mover){
         //entrara si se puede hacer el movimiento para eliminar la bola de enmedio, quitar esa y poner donde toca (modificar la matriz)
         }
-        //llama recursiva que volvera a mirar todas las bolas previas y en caso de que el posible movimiento no sea valido si falla esta rama seguira.
+        //llama recursiva que volvera a mirar todas las bolas previas y en caso de que el posible movimiento no genere sol valida esta rama fallida seguira.
         
-        //al haber fallado desharemos el movimiento previo a la llamada como en el de las reinas, osea las posiciones y de 3 casillsa hay que guardarlas
+        //al haber fallado desharemos el movimiento previo a la llamada como en el de las reinas, osea las posiciones y de 3 casillsa hay que guardarlas. las variables seguiran guardadas puesto que no pasan por referencia de la funcion al llamarse, aunque su hijo tenga distinto valor dentro de la funcion padre esta seguira teniendo el mismo valor osea por ejemplo la variable donde se guarda la bola movida
         
         
       }
