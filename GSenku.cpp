@@ -13,16 +13,24 @@ bool inicializarTablero(const string nombreFichero, tpTablero &tablero){
   f.open(nombreFichero);
   if(f.is_open()){
     f >> tablero.nfils >> tablero.ncols;
-    char celda;
+    //f.ignore();
 
+    char celda;
+    
     for (int i = 0; i < tablero.nfils; ++i) {
       for (int j = 0; j < tablero.ncols; ++j) {
-        while(f>>celda){
+          f >> celda;
+          
           switch (celda) {
             case '-':
-                break;
+              tablero.matriz[i][j] = NO_USADA;
+              break;
 
             case 'x':
+              tablero.matriz[i][j] = OCUPADA;
+              break;
+
+            case 'o':
               tablero.matriz[i][j] = VACIA;
               break;
 
@@ -30,9 +38,10 @@ bool inicializarTablero(const string nombreFichero, tpTablero &tablero){
               cerr << "Entrada de datos del ficheroTablero invalido " << celda << endl;
               return false;
           }
+          f.ignore();
         }
       }
-    }
+    
 
     return true;
   }else{
@@ -45,27 +54,25 @@ bool inicializarTablero(const string nombreFichero, tpTablero &tablero){
 // Post: lee los movimientos válidos del fichero que se le pasa como argumento 
 //      inicializando la estructura y devolviendo true si todo ha ido bien y false si ha habido algún error
 bool inicializarMovimientosValidos(const string nombreFichero, tpMovimientosValidos &movimientos){
-    ifstream f(nombreFichero);
+    ifstream f;
+    f.open(nombreFichero);
     if(f.is_open()){
         char c;
-        while(f>>c){
-            for(int i=0; i <= 8; i++){
-                if (c == '-'){
-                    movimientos.validos[i]=false;
-                }
-                if(c == '+'){
-                    movimientos.validos[i]=true;
-                }
-            }
-        }
-        return true;
+        int i = 0;
+            while(i<8 && f.get(c)){
+              if (c == '+' || c == '-') { // Ignora saltos de línea u otros caracteres
+                movimientos.validos[i] = (c == '+');
+                i++;
+              }
+            } 
+            return true;
+
     }else{
         cerr << "No se ha podido abrir el archivo.";
         return false;
     }
-
-
 }
+
 
 // Pre: tablero contiene el estado actual de la ejecución de la búsqueda de la solución
 // Post: Se ha mostrado el tablero por pantalla
@@ -82,13 +89,13 @@ void mostrarTablero(const tpTablero & tablero){
                 cout << "\033[41m" <<" " << "\033[0m" << " ";
             }
         }
-        cout << endl;
+        cout << endl << endl;
     }
 }
 
 //Post: movPosibles contendra una lista de posiciones donde puede moverse la ficha de posicion actual
 //el vector de movPosibles contiene todas las posiciones de destino posibles
-void rellenarMovimientosPosibles(tpPosicion const posicionActual,  const tpMovimientosValidos &movValidos, tpListaPosiciones &posDestinos, tpListaPosiciones &posIntermedias){
+void rellenarMovimientosPosibles(tpTablero const tablero, tpPosicion const posicionActual,  const tpMovimientosValidos &movValidos, tpListaPosiciones &posDestinos, tpListaPosiciones &posIntermedias){
   for(int i = 0; i < 8; i++){
     if(movValidos.validos[i]){
       //calculamos posiciones de destino y intermedia si es la dirrecion permitida
@@ -106,13 +113,23 @@ void rellenarMovimientosPosibles(tpPosicion const posicionActual,  const tpMovim
         case inferiorDerecha:   x = 2; y = 2; break; 
       }
 
-      posDestinos.posiciones[posDestinos.numPos].x = posicionActual.x + x;
-      posDestinos.posiciones[posDestinos.numPos].y = posicionActual.y + y;
-      posDestinos.numPos++;
+      tpPosicion intermedia, destino;
+      intermedia.x = posicionActual.x + x/2;
+      intermedia.y = posicionActual.y + y/2;
+      destino.x = posicionActual.x + x;
+      destino.y = posicionActual.y + y;
 
-      posIntermedias.posiciones[posIntermedias.numPos].x = posicionActual.x + x/2;
-      posIntermedias.posiciones[posIntermedias.numPos].y = posicionActual.y + y/2;
-      posIntermedias.numPos++;
+      if(){//comprobamos que este en el rango de matriz 
+        if(tablero.matriz[intermedia.x][intermedia.y]==OCUPADA && tablero.matriz[destino.x][destino.y]==VACIA){
+          posDestinos.posiciones[posDestinos.numPos].x = destino.x;
+          posDestinos.posiciones[posDestinos.numPos].y = destino.y;
+          posDestinos.numPos++;
+
+          posIntermedias.posiciones[posIntermedias.numPos].x = intermedia.x;
+          posIntermedias.posiciones[posIntermedias.numPos].y = intermedia.y;
+          posIntermedias.numPos++;
+        }
+      }
 
     }
   }
@@ -147,7 +164,7 @@ int buscaSolucion(tpTablero &tablero, const tpMovimientosValidos &movValidos, tp
 
   for(int i = 0; i < ocupadas.numPos; i++){
     tpListaPosiciones posDestinos, posIntermedias;
-    rellenarMovimientosPosibles(ocupadas.posiciones[i], movValidos, posDestinos, posIntermedias);
+    rellenarMovimientosPosibles(tablero, ocupadas.posiciones[i], movValidos, posDestinos, posIntermedias);
     for (int j = 0; j < posDestinos.numPos; j++){
       //hacemos el movimiento
       int x=ocupadas.posiciones[i].x, y=ocupadas.posiciones[i].y, 
