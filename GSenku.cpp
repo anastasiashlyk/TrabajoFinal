@@ -1,4 +1,4 @@
-    #include <iostream>
+#include <iostream>
 #include <fstream>
 #include "GSenku.hpp"
 using namespace std;
@@ -98,34 +98,97 @@ void mostrarTablero(const tpTablero & tablero){
 // Post: solucionParcial contendrá la lista de movimientos completa (si no se llega a una solución, estará vacía, numMovs == 0)
 //       Devuelve 1 si encuentra solución, -1 si no la encuentra.
 int buscaSolucion(tpTablero &tablero, const tpMovimientosValidos &movValidos, tpListaMovimientos &solucionParcial, const int retardo=0){
-  for (int i = 0; i < tablero.nfils; ++i) {
-    for (int j = 0; j < tablero.ncols; ++j) {
-      //variables que trabajaremos en mod 2 con la intención de apuntar a las posiciones abyacentes a la canica (tocara meterlo como vectores en hpp)
-      int RelojX=0;
-      int RelojY=1;
-      //Valores en dif vect: [0]=(x)0 (y)1, 11, 10, 1-1, 0-1 -1-1 -10 -11 saetas de reloj de los movimientos
-      for (int k = 0; k<=8; ++k) {
-        if(MovimientosValidos.valido[k])
-        //Ahora utilizariamos el vector de las posiciones que apuntan por el reloj para hacer el movimiento de las bolas
-        if(//vola se puede mover){
-        //entrara si se puede hacer el movimiento para eliminar la bola de enmedio, quitar esa y poner donde toca (modificar la matriz)
-        }
-        //llama recursiva que volvera a mirar todas las bolas previas y en caso de que el posible movimiento no genere sol valida esta rama fallida seguira.
-        
-        //al haber fallado desharemos el movimiento previo a la llamada como en el de las reinas, osea las posiciones y de 3 casillsa hay que guardarlas. las variables seguiran guardadas puesto que no pasan por referencia de la funcion al llamarse, aunque su hijo tenga distinto valor dentro de la funcion padre esta seguira teniendo el mismo valor osea por ejemplo la variable donde se guarda la bola movida
-        
-        
+  tpListaPosiciones ocupadas;
+  rellenarOcupadas(tablero, ocupadas);
+
+  if (ocupadas.numPos == 1){
+    return 1;
+  }
+
+  for(int i = 0; i < ocupadas.numPos; i++){
+    tpListaPosiciones posDestinos, posIntermedias;
+    rellenarMovimientosPosibles(ocupadas.posiciones[i], movValidos, posDestinos, posIntermedias);
+    for (int j = 0; j < posDestinos.numPos; j++){
+      //hacemos el movimiento
+      int x=ocupadas.posiciones[i].x, y=ocupadas.posiciones[i].y, 
+          dx=posDestinos.posiciones[j].x, dy=posDestinos.posiciones[j].y,
+          mx=posIntermedias.posiciones[j].x, my=posIntermedias.posiciones[j].y;
+      
+      tablero.matriz[x][y] = VACIA; // ficha origen
+      tablero.matriz[dx][dy] = OCUPADA; // ficha destino
+      tablero.matriz[mx][my] = VACIA; // ficha destino
+
+      //actualizamos solParcial
+      solucionParcial.movs[solucionParcial.numMovs].origen = ocupadas.posiciones[i];
+      solucionParcial.movs[solucionParcial.numMovs].destino = posDestinos.posiciones[j];
+      solucionParcial.numMovs++;
+
+      if(retardo>0){
+        mostrarTablero(tablero);
+      }
+
+      if(buscaSolucion(tablero, movValidos, solucionParcial, retardo)==1){
+        return 1;
+      }
+      //desahacemos el mov 
+      solucionParcial.numMovs--;
+      tablero.matriz[x][y] = OCUPADA; // ficha origen
+      tablero.matriz[dx][dy] = VACIA; // ficha destino
+      tablero.matriz[mx][my] = OCUPADA; // ficha destino
+
+
+    }
+
+  }
+
+  return -1;
+
+}
+
+
+//Post: posiciones contenra una lista de posiciones ocupadas del tablero, indicando tambien el número de posiciones ocupadas
+void rellenarOcupadas(tpTablero const tablero, tpListaPosiciones &posiciones){
+  for(int i =0; i < tablero.nfils; i++){
+    for(int j = 0; j < tablero.ncols; j++){
+      if(tablero.matriz[i][j]==OCUPADA){
+        posiciones.posiciones[posiciones.numPos].x=i;
+        posiciones.posiciones[posiciones.numPos].y=j;
+        posiciones.numPos++;
       }
     }
   }
 }
 
-//forxfor verificar cada pieza independientemente
-  //for verificar cada movimiento de cada pieza
-    //if si es valido modificar, solucionParcial y la matriz actual 
-//
+//Post: movPosibles contendra una lista de posiciones donde puede moverse la ficha de posicion actual
+//el vector de movPosibles contiene todas las posiciones de destino posibles
+void rellenarMovimientosPosibles(tpPosicion const posicionActual,  const tpMovimientosValidos &movValidos, tpListaPosiciones &posDestinos, tpListaPosiciones &posIntermedias){
+  for(int i = 0; i < 8; i++){
+    if(movValidos.validos[i]){
+      //calculamos posiciones de destino y intermedia si es la dirrecion permitida
+      int x = 0, y = 0;
 
+      switch (i)
+      {
+        case superiorIzquierda: x = -2; y = -2; break; 
+        case superior:          x = -2; y = 0; break; 
+        case superiorDerecha:   x = -2; y = 2; break; 
+        case izquierda:         x = 0; y = -2; break; 
+        case derecha:           x = 0; y = 2; break; 
+        case inferiorIzquierda: x = 2; y = -2; break; 
+        case inferior:          x = 2; y = 0; break; 
+        case inferiorDerecha:   x = 2; y = 2; break; 
+      }
 
+      posDestinos.posiciones[posDestinos.numPos].x = posicionActual.x + x;
+      posDestinos.posiciones[posDestinos.numPos].y = posicionActual.y + y;
+      posDestinos.numPos++;
+
+      posIntermedias.posiciones[posIntermedias.numPos].x = posicionActual.x + x/2;
+      posIntermedias.posiciones[posIntermedias.numPos].y = posicionActual.y + y/2;
+      posIntermedias.numPos++;
+
+    }
+  }
 }
 
 
