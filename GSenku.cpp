@@ -9,39 +9,40 @@ using namespace std;
 // Post: lee la configuración y el estado del tablero del fichero de configuración que se le pasa como argumento
 //      inicializando tablero y devolviendo true si todo ha ido bien y false si ha habido algún error
 bool inicializarTablero(const string nombreFichero, tpTablero &tablero){
-ifsteam f;
-f.open(nombrefichero);
-if(f.is_open()){
-f >> tablero.nfils
-f >> tablero.ncols
-if(tablero.nfils<=0||tablero.ncols<=0||tablero.nfils>MAXDIM||tablero.ncols>MAXDIM){
-cerr << "Entradas de dimensiones del ficheroTablero invalidas" << nombreFichero << endl;
-return false;
-}
-getline(f)
-char celda;
-int k=0;
-for (int i = 0; i < tablero.nfils; ++i) {
-      for (int j = 0; j < tablero.ncols; ++j) {
-        (f>>celda)//comprobar que todas las entradas son validas hasta que se cargue todo el tablero
-        switch (celda) {
-            case '-':
-              tablero.matriz[i][j] = NO_USADA;
-              break;
-            case 'o':
-              tablero.matriz[i][j] = OCUPADA;
-              break;
-            case 'x':
-              tablero.matriz[i][j] = VACIA;
-              break;
-            default:
-              cerr << "Entrada de datos del ficheroTablero invalido " << celda << endl;
-              return false;
-        }
+  ifstream f;
+  f.open(nombreFichero);
+  if(f.is_open()){
+    f >> tablero.nfils;
+    f >> tablero.ncols;
+    if(tablero.nfils<=0||tablero.ncols<=0||tablero.nfils>MAXDIM||tablero.ncols>MAXDIM){
+      cerr << "Entradas de dimensiones del ficheroTablero invalidas" << nombreFichero << endl;
+    return false;
     }
-    return true;
+    
+    getline(f)
+    char celda;
+    int k=0;
+  for (int i = 0; i < tablero.nfils; ++i) {
+        for (int j = 0; j < tablero.ncols; ++j) {
+          (f>>celda)//comprobar que todas las entradas son validas hasta que se cargue todo el tablero
+          switch (celda) {
+              case '-':
+                tablero.matriz[i][j] = NO_USADA;
+                break;
+              case 'o':
+                tablero.matriz[i][j] = OCUPADA;
+                break;
+              case 'x':
+                tablero.matriz[i][j] = VACIA;
+                break;
+              default:
+                cerr << "Entrada de datos del ficheroTablero invalido " << celda << endl;
+                return false;
+          }
+      }
+      return true;
 }
-
+  }
 cerr << "Error al abrir el fichero" << nombreFichero << endl;
 return false;
 }
