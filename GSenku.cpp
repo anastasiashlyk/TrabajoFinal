@@ -119,15 +119,18 @@ void rellenarMovimientosPosibles(tpTablero const tablero, tpPosicion const posic
       destino.x = posicionActual.x + x;
       destino.y = posicionActual.y + y;
 
-      if(){//comprobamos que este en el rango de matriz 
-        if(tablero.matriz[intermedia.x][intermedia.y]==OCUPADA && tablero.matriz[destino.x][destino.y]==VACIA){
-          posDestinos.posiciones[posDestinos.numPos].x = destino.x;
-          posDestinos.posiciones[posDestinos.numPos].y = destino.y;
-          posDestinos.numPos++;
+      if(intermedia.x >= 0 && intermedia.y >= 0 && destino.x>=0 && destino.y>=0 &&
+          intermedia.x < tablero.nfils && intermedia.y < tablero.ncols &&
+          destino.x < tablero.nfils && destino.y < tablero.ncols){//comprobamos que este en el rango de matriz 
+        
+          if(tablero.matriz[intermedia.x][intermedia.y]==OCUPADA && tablero.matriz[destino.x][destino.y]==VACIA){
+            posDestinos.posiciones[posDestinos.numPos].x = destino.x;
+            posDestinos.posiciones[posDestinos.numPos].y = destino.y;
+            posDestinos.numPos++;
 
-          posIntermedias.posiciones[posIntermedias.numPos].x = intermedia.x;
-          posIntermedias.posiciones[posIntermedias.numPos].y = intermedia.y;
-          posIntermedias.numPos++;
+            posIntermedias.posiciones[posIntermedias.numPos].x = intermedia.x;
+            posIntermedias.posiciones[posIntermedias.numPos].y = intermedia.y;
+            posIntermedias.numPos++;
         }
       }
 

@@ -47,10 +47,13 @@ int main(int argc, char* argv[]){
             if(buscaSolucion(tablero, movsValidos, solucion)==1){
                 cout << "eres reina!!!!!!!!!"<< endl;
 
-                escribeListaMovimientos("solucion.txt", solucion);
+                
+                cout << endl;
+                mostrarTablero(tablero);
 
 
             }
+            escribeListaMovimientos("solucion.txt", solucion);
         }
         
     }else{
