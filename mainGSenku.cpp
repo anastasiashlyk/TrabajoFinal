@@ -2,6 +2,8 @@
 #include <fstream>
 #include <string>
 #include "GSenku.hpp"
+#include <thread>
+#include <chrono>
 using namespace std;
 
 
@@ -14,9 +16,11 @@ int main(int argc, char* argv[]){
 
     string ficheroTablero = argv[1];
     string ficheroMovimientos = argv[2], ficheroSalida;
-    double retardo = atoi(argv[3]);
+    int retardo = atoi(argv[3]);
     if (argc == 5){
         ficheroSalida = argv[4];
+    }else{
+        ficheroSalida = "solucion.txt";
     }
 
 
@@ -29,7 +33,7 @@ int main(int argc, char* argv[]){
             }
             cout << endl;
         }
-        cout << ficheroMovimientos << endl;
+        cout << ficheroMovimientos << endl << "retardo: "<< retardo << endl;
 
 
         if(inicializarMovimientosValidos(ficheroMovimientos, movsValidos)){
@@ -44,7 +48,7 @@ int main(int argc, char* argv[]){
             cout << endl;
             mostrarTablero(tablero);
 
-            if(buscaSolucion(tablero, movsValidos, solucion)==1){
+            if(buscaSolucion(tablero, movsValidos, solucion, retardo)==1){
                 cout << "eres reina!!!!!!!!!"<< endl;
 
                 
@@ -53,7 +57,7 @@ int main(int argc, char* argv[]){
 
 
             }
-            escribeListaMovimientos("solucion.txt", solucion);
+            escribeListaMovimientos(ficheroSalida, solucion);
         }
         
     }else{

@@ -1,6 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include "GSenku.hpp"
+#include <thread>
+#include <chrono>
 using namespace std;
 
 // FUNCIONES / PROCEDIMIENTOS 
@@ -49,6 +51,11 @@ bool inicializarTablero(const string nombreFichero, tpTablero &tablero){
     return false;
   }
 }
+
+void limpiarPantalla() {
+    cout << "\033[2J\033[1;1H";
+}
+
 
 // Pre: true 
 // Post: lee los movimientos válidos del fichero que se le pasa como argumento 
@@ -184,6 +191,8 @@ int buscaSolucion(tpTablero &tablero, const tpMovimientosValidos &movValidos, tp
       solucionParcial.numMovs++;
 
       if(retardo>0){
+        this_thread::sleep_for(chrono::milliseconds(retardo));
+        limpiarPantalla();
         mostrarTablero(tablero);
       }
 

@@ -1,5 +1,7 @@
 #include <iostream>
 #include <fstream> 
+#include <thread>
+#include <chrono>
 
 using namespace std;
 
@@ -110,6 +112,8 @@ void escribeListaMovimientos (string nombreFichero, const tpListaMovimientos &so
 void rellenarMovimientosPosibles(tpTablero const tablero, tpPosicion const posicionActual,  const tpMovimientosValidos &movValidos, tpListaPosiciones &posDestinos, tpListaPosiciones &posIntermedias);
 
 void rellenarOcupadas(tpTablero const tablero, tpListaPosiciones &posiciones);
+
+void limpiarPantalla() ;
 
 //////////////////////////////////////////////////////////////////////////////
 // Salida con atributos
