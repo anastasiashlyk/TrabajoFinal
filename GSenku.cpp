@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "GSenku.hpp"
+#include <time.h>
 using namespace std;
 
 //Vectores predefinidos para las direcciones X e Y para reduccion de costes (Saetas Reloj)
@@ -83,7 +84,7 @@ bool inicializarMovimientosValidos(const string nombreFichero, tpMovimientosVali
     }
   }
   if(i != 8){
-    cerr << "Error: No se leyeron todos los movimientos válidos" << endl;
+    cerr << "Error: No se leyeron todos los movimientos válidos de una de las casillas" << endl;
     return false;
   }
   return true;
@@ -158,6 +159,7 @@ void rellenarOcupadas(tpTablero const tablero, tpListaPosiciones &posiciones){
 //       Devuelve 1 si encuentra solución, -1 si no la encuentra.
 int buscaSolucion(tpTablero &tablero, const tpMovimientosValidos &movValidos, tpListaMovimientos &solucionParcial, const int retardo){
   tpListaPosiciones ocupadas;//y otra
+  struct timespec inicio, fin;
   rellenarOcupadas(tablero, ocupadas);
   if (ocupadas.numPos == 1){
     return 1;
@@ -181,6 +183,11 @@ int buscaSolucion(tpTablero &tablero, const tpMovimientosValidos &movValidos, tp
       solucionParcial.numMovs++;
       if(retardo>0){
         mostrarTablero(tablero);
+        double long unsigned milisegs = 0;
+        while(milisegs<retardo&&clock_gettime(CLOCK_REALTIME, &inicio)==1){//espera activa
+          clock_gettime(CLOCK_REALTIME, &fin);
+          milisegs = ((fin.tv_msec - inicio.tv_msec )+ milisegs);
+        }
       }
       if(buscaSolucion(tablero, movValidos, solucionParcial, retardo)==1){
         return 1;
@@ -190,6 +197,14 @@ int buscaSolucion(tpTablero &tablero, const tpMovimientosValidos &movValidos, tp
       tablero.matriz[x][y] = OCUPADA; // ficha origen
       tablero.matriz[dx][dy] = VACIA; // ficha destino
       tablero.matriz[mx][my] = OCUPADA; // ficha destino
+      if(retardo>0){
+        mostrarTablero(tablero);
+        double long unsigned milisegs = 0;
+        while(milisegs<retardo&&clock_gettime(CLOCK_REALTIME, &inicio)==1){//espera activa
+          clock_gettime(CLOCK_REALTIME, &fin);
+          milisegs = ((fin.tv_msec - inicio.tv_msec )+ milisegs);
+        }
+      }
     }
   }
   return -1;
@@ -213,4 +228,4 @@ void escribeListaMovimientos (string nombreFichero, const tpListaMovimientos &so
   else{
     f << "-1";
   }
-}
+}////////
