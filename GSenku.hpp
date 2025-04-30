@@ -107,6 +107,16 @@ int buscaSolucion(tpTablero &tablero, const tpMovimientosValidos &movValidos, tp
 //      formato especificado en el guión (si está vacía, se escribe un -1 en el fichero)
 void escribeListaMovimientos (string nombreFichero, const tpListaMovimientos &solucion); 
 
+// Pre: listaMovimientos contiene la lista de movimientos con la solucion 
+// Post: escribe la lista de movimientos en el fichero que se le pasa como argumento siguiendo el 
+//      formato especificado en el guión (si está vacía, se escribe un -1 en el fichero)
+void rellenarMovimientosPosibles(tpTablero const tablero, tpPosicion const posicionActual,  const tpMovimientosValidos &movValidos, tpListaPosiciones &posDestinos, tpListaPosiciones &posIntermedias);
+
+// Pre: listaMovimientos contiene la lista de movimientos con la solucion 
+// Post: escribe la lista de movimientos en el fichero que se le pasa como argumento siguiendo el 
+//      formato especificado en el guión (si está vacía, se escribe un -1 en el fichero)
+void rellenarOcupadas(tpTablero const tablero, tpListaPosiciones &posiciones);
+
 //////////////////////////////////////////////////////////////////////////////
 // Salida con atributos
 //
